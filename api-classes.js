@@ -27,7 +27,7 @@ class StoryList {
     // query the /stories endpoint (no auth required)
     const response = await axios.get(`${BASE_URL}/stories`);
 
-    // turn the plain old story objects from the API into instances of the Story class
+    // turn plain old story objects from API into instances of Story class
     const stories = response.data.stories.map(story => new Story(story));
 
     // build an instance of our own class using the new array of stories
@@ -44,9 +44,6 @@ class StoryList {
    */
 
   async addStory(user, newStory) {
-    // TODO - Implement this functions!
-    // this function should return the newly created story so it can be used in
-    // the script.js file where it will be appended to the DOM
     const response = await axios({
       method: "POST",
       url: `${BASE_URL}/stories`,
@@ -89,10 +86,10 @@ class StoryList {
     this.stories = this.stories.filter(story => story.storyId !== storyId);
 
     // do the same thing for the user's list of stories
-    user.ownStories = user.ownStories.filter(s => s.storyId !== storyId);
+    user.ownStories = user.ownStories.filter(s => s.storyId !== storyId
+    );
   }
 }
-
 
 /**
  * The User class to primarily represent the current user.
@@ -126,7 +123,7 @@ class User {
       user: {
         username,
         password,
-        name
+        name,
       }
     });
 
@@ -149,7 +146,7 @@ class User {
     const response = await axios.post(`${BASE_URL}/login`, {
       user: {
         username,
-        password
+        password,
       }
     });
 
@@ -178,9 +175,7 @@ class User {
 
     // call the API
     const response = await axios.get(`${BASE_URL}/users/${username}`, {
-      params: {
-        token
-      }
+      params: { token }
     });
 
     // instantiate the user from the API information
@@ -192,7 +187,7 @@ class User {
     // instantiate Story instances for the user's favorites and ownStories
     existingUser.favorites = response.data.user.favorites.map(s => new Story(s));
     existingUser.ownStories = response.data.user.stories.map(s => new Story(s));
-    
+
     return existingUser;
   }
 
@@ -212,11 +207,11 @@ class User {
     // update all of the user's properties from the API response
     this.name = response.data.user.name;
     this.createdAt = response.data.user.createdAt;
-    this.updateAt = response.data.user.updatedAt;
+    this.updatedAt = response.data.user.updatedAt;
 
     // remember to convert the user's favorites and ownStories into instances of Story
-    this.favorites = response.data.user.favorites.map(s => newStory(s));
-    this.ownStories = response.data.user.stories.map(s => newStory(s));
+    this.favorites = response.data.user.favorites.map(s => new Story(s));
+    this.ownStories = response.data.user.stories.map(s => new Story(s));
 
     return this;
   }
@@ -226,8 +221,8 @@ class User {
    * - storyId: an ID of a story to add to favorites
    */
 
-  addFavorites(storyId) {
-    return this.toggleFavorite(storyId, "POST");
+  addFavorite(storyId) {
+    return this._toggleFavorite(storyId, "POST");
   }
 
   /**
@@ -235,7 +230,7 @@ class User {
    * - storyId: an ID of a story to remove from favorites
    */
 
-  removeFavorites(storyId) {
+  removeFavorite(storyId) {
     return this._toggleFavorite(storyId, "DELETE");
   }
 
@@ -244,7 +239,6 @@ class User {
    * - storyId: an ID of a story to remove from favorites
    * - httpVerb: POST or DELETE based on adding or removing
    */
-
   async _toggleFavorite(storyId, httpVerb) {
     await axios({
       url: `${BASE_URL}/users/${this.username}/favorites/${storyId}`,
@@ -259,10 +253,10 @@ class User {
   }
 
   /**
-  * Send a PATCH request to the API in order to update the user
-  * - userData: the user properties you want to update
-  */
-  
+   * Send a PATCH request to the API in order to update the user
+   * - userData: the user properties you want to update
+   */
+
   async update(userData) {
     const response = await axios({
       url: `${BASE_URL}/users/${this.username}`,
@@ -345,5 +339,3 @@ class Story {
     return this;
   }
 }
-
-
