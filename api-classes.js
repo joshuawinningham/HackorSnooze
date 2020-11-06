@@ -221,7 +221,7 @@ class User {
    * - storyId: an ID of a story to add to favorites
    */
 
-  addFavorite(storyId) {
+  addFavorites(storyId) {
     return this._toggleFavorite(storyId, "POST");
   }
 
@@ -230,7 +230,7 @@ class User {
    * - storyId: an ID of a story to remove from favorites
    */
 
-  removeFavorite(storyId) {
+  removeFavorites(storyId) {
     return this._toggleFavorite(storyId, "DELETE");
   }
 

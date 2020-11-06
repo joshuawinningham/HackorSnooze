@@ -133,12 +133,12 @@ $(async function () {
       // if the item is already favorited
       if ($tgt.hasClass("fas")) {
         // remove the favorite from the user's list
-        await currentUser.removeFavorite(storyId);
+        await currentUser.removeFavorites(storyId);
         // then change the class to be an empty star
         $tgt.closest("i").toggleClass("fas far");
       } else {
         // the item is un-favorited
-        await currentUser.addFavorite(storyId);
+        await currentUser.addFavorites(storyId);
         $tgt.closest("i").toggleClass("fas far");
       }
     }
